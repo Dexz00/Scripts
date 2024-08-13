@@ -1,4 +1,3 @@
-
 -- // Script de Autofarm de Caixas
 
 -- Variáveis Globais
@@ -130,12 +129,12 @@ local function autoFarm()
 
         if collectBox() then
             moveTo(endPosition)
-            wait(0)
+            wait(1)
         else
             handleError("Erro ao coletar a caixa")
         end
 
-        wait(0)
+        wait(2)
     end
 end
 
