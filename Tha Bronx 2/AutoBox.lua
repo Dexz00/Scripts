@@ -65,7 +65,7 @@ local function collectBox()
                                     return false
                                 end
                                 
-                                wait(2) -- Esperar tempo extra para garantir que a caixa foi pega
+                                wait(1) -- Esperar tempo extra para garantir que a caixa foi pega
 
                                 -- Equipar a Box
                                 local backpack = player.Backpack
@@ -124,7 +124,7 @@ local function autoFarm()
 
         if collectBox() then
             moveTo(endPosition)
-            wait(1)
+            wait(0)
         else
             handleError("Erro ao coletar a caixa")
         end
