@@ -1,7 +1,7 @@
 -- // Script de Autofarm de Caixas
 
 -- Variáveis Globais
-local autoBoxEnabled = true -- Assumindo que você vai ativar o toggle manualmente ao executar o script
+local autoBoxEnabled = true
 
 -- Função para lidar com erros
 local function handleError(errorMessage)
@@ -10,6 +10,8 @@ end
 
 -- Função para teleportar sem interferir com animações
 local function moveTo(position)
+    if not autoBoxEnabled then return end -- Verifica se o autofarm está ativo
+
     local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid")
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
@@ -29,6 +31,8 @@ end
 
 -- Função para coletar a caixa
 local function collectBox()
+    if not autoBoxEnabled then return end -- Verifica se o autofarm está ativo
+
     local player = game.Players.LocalPlayer
     local character = player.Character
     local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
@@ -115,6 +119,8 @@ local function autoFarm()
     while autoBoxEnabled do
         moveTo(startPosition)
         wait(1)
+
+        if not autoBoxEnabled then break end -- Verifica antes de coletar
 
         if collectBox() then
             moveTo(endPosition)
