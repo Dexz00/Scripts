@@ -11,7 +11,7 @@ end
 
 -- Função para teleportar sem interferir com animações
 local function moveTo(position)
-    if not autoBoxEnabled or stopRequested then return end -- Verifica se o autofarm está ativo e se uma parada foi solicitada
+    if not autoBoxEnabled or stopRequested then return end
 
     local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid")
@@ -32,14 +32,14 @@ end
 
 -- Função para coletar a caixa
 local function collectBox()
-    if not autoBoxEnabled or stopRequested then return end -- Verifica se o autofarm está ativo e se uma parada foi solicitada
+    if not autoBoxEnabled or stopRequested then return end
 
     local player = game.Players.LocalPlayer
     local character = player.Character
     local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
 
     if humanoidRootPart then
-        local mapName = "1# Map"  -- Nome do mapa
+        local mapName = "1# Map"
         for _, map in pairs(workspace:GetChildren()) do
             if map.Name == mapName then
                 local meshes = map:FindFirstChild("2 Meshes")
@@ -57,7 +57,7 @@ local function collectBox()
                         if handle then
                             local proximityPrompt = handle:FindFirstChildOfClass("ProximityPrompt")
                             if proximityPrompt then
-                                proximityPrompt.ActionText = "Coletando..."  -- Feedback visual
+                                proximityPrompt.ActionText = "Coletando..."
                                 local success, errorMessage = pcall(function()
                                     proximityPrompt:InputHoldBegin()
                                 end)
@@ -66,9 +66,8 @@ local function collectBox()
                                     return false
                                 end
                                 
-                                wait(2) -- Esperar tempo extra para garantir que a caixa foi pega
+                                wait(2)
 
-                                -- Equipar a Box
                                 local backpack = player.Backpack
                                 local tool = backpack:FindFirstChildWhichIsA("Tool")
                                 if tool then
@@ -126,7 +125,7 @@ local function autoFarm()
         moveTo(startPosition)
         wait(1)
 
-        if not autoBoxEnabled or stopRequested then break end -- Verifica antes de coletar
+        if not autoBoxEnabled or stopRequested then break end
 
         if collectBox() then
             moveTo(endPosition)
