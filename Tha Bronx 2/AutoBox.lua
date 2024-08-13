@@ -129,12 +129,12 @@ local function autoFarm()
 
         if collectBox() then
             moveTo(endPosition)
-            wait(1)
+            wait(0)
         else
             handleError("Erro ao coletar a caixa")
         end
 
-        wait(2)
+        wait(0)
     end
 end
 
