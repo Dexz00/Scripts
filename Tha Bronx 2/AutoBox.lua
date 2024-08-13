@@ -2,6 +2,7 @@
 
 -- Variáveis Globais
 local autoBoxEnabled = true
+local stopRequested = false
 
 -- Função para lidar com erros
 local function handleError(errorMessage)
@@ -10,7 +11,7 @@ end
 
 -- Função para teleportar sem interferir com animações
 local function moveTo(position)
-    if not autoBoxEnabled then return end -- Verifica se o autofarm está ativo
+    if not autoBoxEnabled or stopRequested then return end -- Verifica se o autofarm está ativo e se uma parada foi solicitada
 
     local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid")
@@ -31,7 +32,7 @@ end
 
 -- Função para coletar a caixa
 local function collectBox()
-    if not autoBoxEnabled then return end -- Verifica se o autofarm está ativo
+    if not autoBoxEnabled or stopRequested then return end -- Verifica se o autofarm está ativo e se uma parada foi solicitada
 
     local player = game.Players.LocalPlayer
     local character = player.Character
@@ -65,7 +66,7 @@ local function collectBox()
                                     return false
                                 end
                                 
-                                wait(1) -- Esperar tempo extra para garantir que a caixa foi pega
+                                wait(2) -- Esperar tempo extra para garantir que a caixa foi pega
 
                                 -- Equipar a Box
                                 local backpack = player.Backpack
@@ -117,14 +118,19 @@ local endPosition = Vector3.new(-1535.427978515625, 252.99974060058594, -489.204
 -- Função principal do loop de autofarm
 local function autoFarm()
     while autoBoxEnabled do
+        if stopRequested then
+            print("AutoBox interrompido")
+            break
+        end
+
         moveTo(startPosition)
         wait(1)
 
-        if not autoBoxEnabled then break end -- Verifica antes de coletar
+        if not autoBoxEnabled or stopRequested then break end -- Verifica antes de coletar
 
         if collectBox() then
             moveTo(endPosition)
-            wait(0)
+            wait(1)
         else
             handleError("Erro ao coletar a caixa")
         end
@@ -133,4 +139,13 @@ local function autoFarm()
     end
 end
 
-return autoFarm
+return {
+    start = function()
+        autoBoxEnabled = true
+        stopRequested = false
+        autoFarm()
+    end,
+    stop = function()
+        stopRequested = true
+    end
+}
