@@ -1,7 +1,7 @@
 -- // Script de Autofarm de Caixas
 
 -- Variáveis Globais
-local autoBoxEnabled = true
+local autoBoxEnabled = false
 local stopRequested = false
 
 -- Função para lidar com erros
@@ -69,21 +69,16 @@ local function collectBox()
                                 wait(2)
 
                                 local backpack = player.Backpack
-                                local tool = backpack:FindFirstChildWhichIsA("Tool")
-                                if tool then
-                                    local box = backpack:FindFirstChild("Box")
-                                    if box and box:IsA("Tool") then
-                                        local success, equipError = pcall(function()
-                                            player.Character:WaitForChild("Humanoid"):EquipTool(box)
-                                        end)
-                                        if not success then
-                                            handleError("Erro ao equipar a Box: " .. equipError)
-                                        end
-                                    else
-                                        handleError("Box não encontrada ou não é um Tool")
+                                local box = backpack:FindFirstChild("Box")
+                                if box and box:IsA("Tool") then
+                                    local success, equipError = pcall(function()
+                                        player.Character:WaitForChild("Humanoid"):EquipTool(box)
+                                    end)
+                                    if not success then
+                                        handleError("Erro ao equipar a Box: " .. equipError)
                                     end
                                 else
-                                    handleError("Nenhum Tool encontrado no Backpack")
+                                    handleError("Box não encontrada ou não é um Tool")
                                 end
 
                                 return true
@@ -140,11 +135,18 @@ end
 
 return {
     start = function()
+        if autoBoxEnabled then
+            print("AutoBox já está em execução")
+            return
+        end
+
+        print("Iniciando AutoBox")
         autoBoxEnabled = true
         stopRequested = false
         autoFarm()
     end,
     stop = function()
+        print("Solicitação para parar AutoBox recebida")
         stopRequested = true
     end
 }
