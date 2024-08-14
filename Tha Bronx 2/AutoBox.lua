@@ -66,7 +66,7 @@ local function collectBox()
                                     return false
                                 end
                                 
-                                wait(1.5)
+                                wait(1)
 
                                 local backpack = player.Backpack
                                 local box = backpack:FindFirstChild("Box")
@@ -118,13 +118,13 @@ local function autoFarm()
         end
 
         moveTo(startPosition)
-        wait(1)
+        wait(0)
 
         if not autoBoxEnabled or stopRequested then break end
 
         if collectBox() then
             moveTo(endPosition)
-            wait(0)
+            wait(1)
         else
             handleError("Erro ao coletar a caixa")
         end
